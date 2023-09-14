@@ -1,0 +1,13 @@
+### Terraform ###
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+### keys ###
+*.pem
+key.json
+ansible_ed25519*
+

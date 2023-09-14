@@ -1,0 +1,59 @@
+---
+- name: install docker
+  hosts: rancher
+  become: yes
+  vars:
+    ubuntu_codename: "{{ ansible_distribution_release }}"
+
+  tasks:
+    - name: update package
+      apt:
+        update_cache: yes
+      when: "ansible_os_family == 'Debian'"
+
+    - name: install depencency
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+      when: "ansible_os_family == 'Debian'"
+
+    - name: add repo Docker GPG
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: "ansible_os_family == 'Debian'"
+
+    - name: add repo do Docker
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_codename }} stable
+      when: "ansible_os_family == 'Debian'"
+
+    - name: update package
+      apt:
+        update_cache: yes
+      when: "ansible_os_family == 'Debian'"
+
+    - name: install Docker
+      package:
+        name: docker-ce
+        state: present
+      when: "ansible_os_family == 'Debian'"
+
+    - name: start and enable Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+      when: "ansible_os_family == 'Debian'"
+
+    - name: add user to docker group
+      user:
+        name: ansible
+        groups: docker
+        append: yes
+      when: "ansible_os_family == 'Debian'"
