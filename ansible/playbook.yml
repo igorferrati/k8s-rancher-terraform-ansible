@@ -74,17 +74,24 @@
       async: 1800  #exec background 1800s
       poll: 0
 
-    - name: Sleep for 1 minute
+    - name: Sleep to set up rancher 
       pause:
-        seconds: 40
+        seconds: 120
       
-
     - name: Get Bootstrap Password
-      command: "sudo docker logs $(sudo docker ps -q --filter 'ancestor=rancher/rancher:v2.6.8') | grep 'Bootstrap Password'"
+      shell: |
+        id=$(docker ps --format "{{.ID}}")
+        docker logs $(id) | grep 'Bootstrap Password'
       register: bootstrap_password
-      
 
     - name: Display Bootstrap Password
       debug:
         var: bootstrap_password.stdout_lines
 
+
+# - name: Register nodes
+#   hosts: nodes
+#   become: yes
+
+#   tasks:
+#     - name: register
