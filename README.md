@@ -39,7 +39,7 @@ ssh-keygen -t ed25519 -f ~/path/ansible_ed25519 -C ansible
 
 ### Set up infra
 
-set up main.tf in folders: nodes and rancher.
+set up main.tf in folders: infra and rancher+nodes.
 
 in each folder:
 ```
