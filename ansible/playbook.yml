@@ -1,17 +1,17 @@
 ---
-- name: install docker
-  hosts: rancher
+- name: Install Docker
+  hosts: rancher:nodes
   become: yes
   vars:
     ubuntu_codename: "{{ ansible_distribution_release }}"
 
   tasks:
-    - name: update package
+    - name: Update package
       apt:
         update_cache: yes
       when: "ansible_os_family == 'Debian'"
 
-    - name: install depencency
+    - name: Install dependency
       package:
         name: "{{ item }}"
         state: present
@@ -22,38 +22,76 @@
         - software-properties-common
       when: "ansible_os_family == 'Debian'"
 
-    - name: add repo Docker GPG
+    - name: Add Docker GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
       when: "ansible_os_family == 'Debian'"
 
-    - name: add repo do Docker
+    - name: Add Docker repository
       apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_codename }} stable
       when: "ansible_os_family == 'Debian'"
 
-    - name: update package
+    - name: Update package 
       apt:
         update_cache: yes
       when: "ansible_os_family == 'Debian'"
 
-    - name: install Docker
+    - name: Install Docker on Debian hosts
       package:
         name: docker-ce
         state: present
       when: "ansible_os_family == 'Debian'"
 
-    - name: start and enable Docker
+    - name: Start and enable Docker
       systemd:
         name: docker
         enabled: yes
         state: started
       when: "ansible_os_family == 'Debian'"
 
-    - name: add user to docker group
+    - name: Add user to docker group
       user:
-        name: ansible
+        name: ferrati_igor
         groups: docker
         append: yes
       when: "ansible_os_family == 'Debian'"
+
+- name: Configure Rancher
+  hosts: rancher
+  become: yes
+
+  tasks:
+    - name: Create directory
+      file:
+        path: /opt/rancher
+        state: directory
+
+    - name: Run Rancher container
+      shell: |
+        docker run -d --privileged -v /opt/rancher:/var/lib/rancher -p 80:80 -p 443:443 rancher/rancher:v2.6.8
+      async: 1800  #exec background 1800s
+      poll: 0
+
+    - name: Sleep to set up rancher 
+      pause:
+        seconds: 120
+      
+    - name: Get Bootstrap Password
+      shell: |
+        id=$(docker ps --format "{{.ID}}")
+        docker logs $(id) | grep 'Bootstrap Password'
+      register: bootstrap_password
+
+    - name: Display Bootstrap Password
+      debug:
+        var: bootstrap_password.stdout_lines
+
+
+# - name: Register nodes
+#   hosts: nodes
+#   become: yes
+
+#   tasks:
+#     - name: register
