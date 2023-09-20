@@ -38,7 +38,7 @@
         update_cache: yes
       when: "ansible_os_family == 'Debian'"
 
-    - name: Install Docker on Debian hosts
+    - name: Install Docker on hosts
       package:
         name: docker-ce
         state: present
@@ -71,8 +71,6 @@
     - name: Run Rancher container
       shell: |
         docker run -d --privileged -v /opt/rancher:/var/lib/rancher -p 80:80 -p 443:443 rancher/rancher:v2.6.8
-      async: 1800  #exec background 1800s
-      poll: 0
 
     - name: Sleep to set up rancher 
       pause:
@@ -81,7 +79,7 @@
     - name: Get Bootstrap Password
       shell: |
         id=$(docker ps --format "{{.ID}}")
-        docker logs $(id) | grep 'Bootstrap Password'
+        docker logs $id | grep 'Bootstrap Password'
       register: bootstrap_password
 
     - name: Display Bootstrap Password
