@@ -58,6 +58,18 @@ terraform destroy
 
 ### Ansible
 
+Required Python library to use docker_container_module:
+
+for python 3:
+
+``` 
+pip install docker 
+```
+
+For more: [ansible documentation](https://docs.ansible.com/ansible/2.9/modules/docker_container_module.html)
+
+---
+
 We're using ansible to set up all dependencies in our infra.
 
 This is an exercise for study and have many ways to do this !.
