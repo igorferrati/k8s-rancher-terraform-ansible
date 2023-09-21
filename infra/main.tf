@@ -36,6 +36,18 @@ provider "google" {
   zone    = var.gcp_zone
 }
 
+resource "google_compute_firewall" "web" {
+  name = "web-access"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_instance" "vm-ubuntu" {
   for_each = local.nodes
 
@@ -51,8 +63,7 @@ resource "google_compute_instance" "vm-ubuntu" {
 
   network_interface {
     network = "default"
-    access_config {
-      // Ephemeral public IP
-    }
+    access_config {}
   }
+
 }
