@@ -11,3 +11,6 @@ module "rancher_nodes" {
   image = "ubuntu-2004-focal-v20230907"
 }
 
+output "external_ips" {
+  value = module.rancher_nodes.external_ips
+}

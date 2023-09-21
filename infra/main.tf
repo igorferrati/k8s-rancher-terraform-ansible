@@ -42,7 +42,7 @@ resource "google_compute_firewall" "web" {
 
   allow {
     protocol = "tcp"
-    ports = ["80"]
+    ports = ["80", "443"]
   }
 
   source_ranges = ["0.0.0.0/0"]
@@ -63,7 +63,16 @@ resource "google_compute_instance" "vm-ubuntu" {
 
   network_interface {
     network = "default"
-    access_config {}
+    access_config {
+
+    }
   }
 
+}
+
+output "external_ips" {
+  value = {
+    for instance in google_compute_instance.vm-ubuntu :
+    instance.name => instance.network_interface[0].access_config[0].nat_ip
+  }
 }
