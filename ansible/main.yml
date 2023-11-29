@@ -1,0 +1,12 @@
+---
+- name: Install Docker
+  hosts: rancher:nodes
+  become: yes
+  vars:
+    ubuntu_codename: "{{ ansible_distribution_release }}"
+
+  tasks:
+
+- name: Configure Rancher
+  hosts: rancher
+  become: yes

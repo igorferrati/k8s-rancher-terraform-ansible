@@ -1,0 +1,28 @@
+- name: Create directory
+  file:
+    path: /opt/rancher
+    state: directory
+
+- name: Run Rancher container
+  docker_container:
+    name: myrancher
+    image: rancher/rancher:v2.6.8
+    privileged: yes
+    volumes:
+      - /opt/rancher:/var/lib/rancher
+    ports:
+      - "80:80"
+      - "443:443"
+    detach: yes
+
+- name: Sleep to set up Rancher 
+  pause:
+    seconds: 60
+  
+- name: Get Bootstrap Password
+  shell: "docker logs myrancher | grep 'Bootstrap Password'"
+  register: bootstrap_password
+
+- name: Display Bootstrap Password
+  debug:
+    var: bootstrap_password.stdout_lines

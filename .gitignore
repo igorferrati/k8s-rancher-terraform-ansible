@@ -5,10 +5,13 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+.terraform
+*.hcl
 
 ### keys ###
 *.pem
 key.json
 ansible_ed25519*
 .vscode
+keys
 
