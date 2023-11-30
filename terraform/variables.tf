@@ -1,6 +1,6 @@
 variable "gcp_project" {
   type = string
-  default = "terraform-lab-406618"
+  default = ""
 }
 
 variable "gcp_region" {
