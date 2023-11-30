@@ -1,7 +1,6 @@
 - name: Update package
   apt:
     update_cache: yes
-  when: "ansible_os_family == 'Debian'"
 
 - name: Install dependency
   package:
@@ -12,5 +11,4 @@
     - ca-certificates
     - curl
     - software-properties-common
-  when: "ansible_os_family == 'Debian'"
   

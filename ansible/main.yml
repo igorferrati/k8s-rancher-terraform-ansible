@@ -1,12 +1,22 @@
 ---
-- name: Install Docker
-  hosts: rancher:nodes
-  become: yes
-  vars:
-    ubuntu_codename: "{{ ansible_distribution_release }}"
-
+- hosts: all
   tasks:
+  # - name: Update vms
+  #   ansible.builtin.import_role:
+  #     name: setup_linux
+  #     tasks_from: setup_linux.yaml
+  #   become: yes
 
-- name: Configure Rancher
-  hosts: rancher
-  become: yes
+  - name: Docker install in nodes
+    ansible.builtin.import_role:
+      name: docker_setup
+      tasks_from: docker_install.yaml
+    become: yes
+
+- hosts: rancher
+  tasks:
+  - name: Setup rancher
+    ansible.builtin.import_role:
+      name: rancher_setup
+      tasks_from: rancher_in_docker.yaml
+    become: yes
