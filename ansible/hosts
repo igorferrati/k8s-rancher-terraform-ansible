@@ -1,0 +1,7 @@
+[rancher]
+34.41.140.145 ansible_user=ansible ansible_ssh_private_key_file="~/projects/k8s-rancher-terraform-ansible/keys/ansible_ed25519"
+
+[nodes]
+34.135.20.95 ansible_user=ansible ansible_ssh_private_key_file="~/projects/k8s-rancher-terraform-ansible/keys/ansible_ed25519"
+34.67.34.1 ansible_user=ansible ansible_ssh_private_key_file="~/projects/k8s-rancher-terraform-ansible/keys/ansible_ed25519"
+34.72.116.153 ansible_user=ansible ansible_ssh_private_key_file="~/projects/k8s-rancher-terraform-ansible/keys/ansible_ed25519"

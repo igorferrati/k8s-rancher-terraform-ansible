@@ -1,36 +1,35 @@
 - name: Add Docker GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
-  when: "ansible_os_family == 'Debian'"
 
 - name: Add Docker repository
-  apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_codename }} stable
-  when: "ansible_os_family == 'Debian'"
-
-- name: Update package 
-  apt:
-    update_cache: yes
-  when: "ansible_os_family == 'Debian'"
-
-- name: Install Docker on hosts
-  package:
-    name: docker-ce
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
     state: present
-  when: "ansible_os_family == 'Debian'"
+  
+- name: Update package 
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    update_cache: true
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
 
 - name: Start and enable Docker
-  systemd:
+  ansible.builtin.service:
     name: docker
-    enabled: yes
     state: started
-  when: "ansible_os_family == 'Debian'"
+    enabled: true
 
-- name: Add user to docker group
-  user:
-    name: ferrati_igor
+- name: Create docker group
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Add ansible user to docker group
+  ansible.builtin.user:
+    name: ansible
     groups: docker
-    append: yes
-  when: "ansible_os_family == 'Debian'"
-  
+    append: true
