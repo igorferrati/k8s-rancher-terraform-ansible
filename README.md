@@ -50,41 +50,52 @@ Obs: we're using ansible to set up all dependencies in our infra, this is an exe
 
 ---
 
-### Set up infra
+### Terraform
 
-set up ```main.tf``` in folders: 
-* infra
-* rancher+nodes
-
-1. in each folder:
-
+in terraform folder: 
 ```
 terraform init
 ```
-2. In node+rancher folder:
 
 ```
 terraform apply
 ```
 
-3. Pickup output ip's in terminal and set ```hosts.yml``` in ansible folder.
-
-4. Run ansible playbook to install docker and run rancher in container.
+3. Pickup output ip's in terminal and set ```hosts``` with ips, user and ssh keypath in ansible folder.
 
 ```
- ansible-playbook playbook.yml -u ansible --private-key ansible_ed25519 -i hosts.yml
+[name]
+ip ansible_user=user ansible_ssh_private_key_file="/path/your_private_key"
+```
+### Ansible
+
+And then run:
+
+```
+ ansible-playbook main.yml -i hosts.yml
 ```
 
 5. Pick up output ```Bootstrap Password``` and access ```vm-rancher-ip:80``` to finish Rancher install and reate a new custom cluster.
 
-6. Now register your nodes in your new custom cluster:
+### Golang
+
+6. Now we're gonna use script go to register nodes in our new custom cluster, in script folder:
+
+* You need to add you cluster token and vms ip, take a look in go script to setup. Then:
 
 ```
-ssh -i ansible_ed25519 ansible@vm-ip
+go init mod nodes-register.go
 ```
-Execute your **resgitration command** for each node and fish.
+```
+go get packages.name
+```
+```
+go run nodes-register.go
+```
 
-7. if you want to destroy your infra, in node+rancher folder:
+7. Wait and fish !
+
+### Destroy your infra
 
 ```
 terraform destroy
