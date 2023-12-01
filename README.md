@@ -84,7 +84,7 @@ And then run:
 * You need to add you cluster token and vms ip, take a look in go script to setup. Then:
 
 ```
-go init mod nodes-register.go
+go mod init nodes-register.go
 ```
 ```
 go get packages.name
