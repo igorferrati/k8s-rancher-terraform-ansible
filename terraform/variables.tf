@@ -42,3 +42,13 @@ variable "image" {
   type = string
   default = "ubuntu-2004-focal-v20230907"
 }
+
+variable "boot_disk_size_nodes" {
+  type = string
+  default = "40GB"
+}
+
+variable "boot_disk_size_rancher" {
+  type = string
+  default = "20GB"
+}

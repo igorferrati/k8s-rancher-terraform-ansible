@@ -12,7 +12,7 @@ var (
 	sshUser       = "ansible"
 	sshKey        = "/home/igor/projects/k8s-rancher-terraform-ansible/keys/ansible_ed25519"
 	waitTime      = 4 * time.Minute
-	commandToExec = "sudo docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run  rancher/rancher-agent:v2.6.8 --server {{ https://ip-rancher}} --token twz49hns8tp69ldsj7jrtpzxb6gskm9fqxkmj5r6nkts2ktkl8n96s --ca-checksum {{ rancher roken id }} {{ --etcd }} {{ --controlplane }} {{ --worker }}"
+	commandToExec = "sudo docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run  rancher/rancher-agent:v2.6.8 --server {{ https://ip-rancher}} --token {{ your-rancher-token }} --ca-checksum {{ rancher roken id }} {{ --etcd }} {{ --controlplane }} {{ --worker }}"
 )
 
 var ipList = []string{"ip", "ip", "ip"}
